@@ -1,0 +1,21 @@
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.error {
+    border: 2px solid #FF6565;
+  }
+
+  .error-message {
+    color: #FF6565;
+    padding: .5em .2em;
+    height: 1em;
+    font-size: 18px;
+    margin-bottom: 15px;
+
+  }
+
