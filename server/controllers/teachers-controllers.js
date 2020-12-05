@@ -1,32 +1,37 @@
 const knex = require('../db')
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt')
 
-const jsonwebtoken = require('jsonwebtoken');
-const jwtSecret = 'secret123';
+const jsonwebtoken = require('jsonwebtoken')
+const jwtSecret = 'secret123'
 
 exports.teachersLogin = async (req, res) => {
 
-    let emailReq = req.body.email;
+    let emailReq = req.body.email
     let passwordReq = req.body.password
     knex
       .where({email:emailReq})
-      .select("password")
+      .select("password", "name", "surname")
       .from('teachers') 
       .then(userData => {
         bcrypt.compare(passwordReq, userData[0].password, function(err, result) {
             if(result){
                 console.log(userData[0].password)
-                const token = jsonwebtoken.sign({user: userData[0].name}, jwtSecret)
-                res.cookie('token', token, {httpOnly:true})
-                res.json({token} )
+                const d=userData[0]
+                const fullName= `${d.name} ${d.surname}`
+                let expireTime=15*60
+                const token = jsonwebtoken.sign({user: fullName}, jwtSecret, {expiresIn: expireTime})
+                res.cookie('token', token, {httpOnly:true, sameSite:true, maxAge: 1000 * expireTime})
+                // const d=userData[0]
+                // res.json(fullName)
+                res.end()
 
             } else{
                 res.status(401).send({
                     errors: [{ 'param': 'Server', 'msg': 'Wrong email or password' }] 
-                  });
+                  })
                   res.end()
             }
-        });
+        })
       })
       .catch(err => {
         // Send a error message in response
@@ -34,3 +39,8 @@ exports.teachersLogin = async (req, res) => {
         res.json({ message: `There was an error retrieving teacher data: ${err}` })
       })
   }
+
+
+exports.teacherLogOut = async(req, res) => {
+    res.clearCookie("token").end()
+}

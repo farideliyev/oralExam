@@ -3,7 +3,7 @@ import {Form, Button, Col,} from 'react-bootstrap';
 import isAbsent from "yup/lib/util/isAbsent";
 
 
-    const ExecuteExam = () => {
+    const ExecuteExam = (props) => {
 
         const [currentUserData, setCurrentUserData ]= useState({id:null, mark:null})
         const [students, setStudents] = useState([]);
@@ -56,6 +56,7 @@ import isAbsent from "yup/lib/util/isAbsent";
                 debugger;
                 if( response.status===200) {
                     setStudentInProgress([null]);
+                   await fetchData()
                 };
 
         }
@@ -73,9 +74,6 @@ import isAbsent from "yup/lib/util/isAbsent";
             }
         }
 
-        // if student got mark, dont show him again
-        // if he got mark give him presence yes
-        // if absent give him presence NOT and dont show him in list of available students
         // show content for exam details (name teacher, exam call and course name)
 
 
@@ -84,7 +82,7 @@ import isAbsent from "yup/lib/util/isAbsent";
         <>
             <div>
                 <div className="execute-title">
-                    <p>Exam created by TEACHER FOR COURSE.NAME OF JULY CALL</p>
+                    <p>Exam created by {props.user} FOR COURSE.NAME OF JULY CALL</p>
                 </div>
                 <table>
                     <tbody>

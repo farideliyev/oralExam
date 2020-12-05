@@ -1,4 +1,6 @@
 const knex = require('../db')
+const jsonwebtoken = require('jsonwebtoken')
+const jwtSecret = 'secret123'
 
 exports.studentsAll = async (req, res) => {
     // Get all books from database

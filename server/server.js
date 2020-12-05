@@ -1,5 +1,6 @@
 const express = require('express')
 const jwt = require('express-jwt');
+
 const cookieParser=require('cookie-parser')
 const studentsRouter = require('./routes/students-route')
 const teachersRouter=require('./routes/teachers-route')
@@ -22,20 +23,29 @@ const bodyParser = require('body-parser')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
 app.use(cookieParser())
 
+app.use('/api/teachers', teachersRouter)
+app.use(
+    jwt({
+    secret:jwtSecret,
+    algorithms: ['HS256'],
+    getToken: (req)=>req.cookies.token,
+
+  })
+)
 
 //Route usage
 app.use('/api/students', studentsRouter)
-app.use('/api/teachers', teachersRouter)
+
+app.get('/api/admin',  function (req,res){
+    res.json(req.user.user)
+    console.log("in admin router")
+    res.end()
+} )
 app.use('/api/courses', coursesRouter)
 app.use('/api/exams', examsRouter)
 app.use('/api/grades', gradesRouter)
-
-
-
-
 
 
 
@@ -44,6 +54,14 @@ app.use('/api/grades', gradesRouter)
 app.use(function ( req, res, next) {
   res.status(500).send('Something is broken.')
 })
+
+app.use(function (err, req, res, next) {
+  if(err.name==="UnauthorizedError"){
+    res.status(401).send('Invalid token')
+  }
+})
+
+
 
 app.use(function (req, res, next) {
   res.status(404).send('Sorry we could not find that.')

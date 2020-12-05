@@ -1,11 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useReducer, useContext} from 'react';
 import {Form,Button} from 'react-bootstrap'
 import './Teacher.css';
 import { Formik } from 'formik';
 import * as Yup from "yup";
 import { useHistory, Route} from 'react-router-dom';
-// import Admin from '../Admin/Admin';
-
+import {AuthContext} from "../../auth/authContext";
 
 
 const validationSchema = Yup.object().shape({
@@ -15,20 +14,24 @@ const validationSchema = Yup.object().shape({
      .required("Password is required")
   });
 
-const Teacher=(props)=>{
+const Teacher=()=>{
+    const {dispatch}=useContext(AuthContext)
     const history = useHistory();
-    const[isAuth, setIsAuth]=useState(false);
+    // const[isAuth, setIsAuth]=useState(false);
+    // const [user, setUser]=useState(null)
+
+    // useEffect(() => {
+    //     if(isAuth){
+    //        props.parentData(isAuth, user)
+    //     }
+    // })
 
     useEffect(() => {
-        if(isAuth){
-           props.parentData(isAuth)
-        }
+
     })
-    // const[email, setEmail]=useState("");
-    // const[password, setPassword]=useState("");
 
    const handleFetch = async (values) => {
-       
+       debugger
     let response = await fetch('http://localhost:3000/api/teachers/login', {
         method: 'POST',
         body: JSON.stringify({
@@ -41,13 +44,29 @@ const Teacher=(props)=>{
 
     })
 
-    if (response.status=== 200) {
-         setIsAuth(true)
-         console.log(isAuth +" from fetch")
-        // console.log(response)
-        history.push('/admin')
-        
-    } else if(response.status===500){
+    // if (response.status=== 200) {
+    //     let responseJson= await response.json()
+    //     setUser(responseJson)
+    //     setIsAuth(true)
+    //      console.log(isAuth +" from fetch")
+    //     history.push('/admin')
+    //
+    //
+    // }
+
+       if (response.status=== 200) {
+
+
+           await dispatch({
+               type:"LOGIN"
+
+           })
+
+           history.push('/admin')
+
+       }
+
+    else if(response.status===500){
         history.push('/teacher')
     }
 }
