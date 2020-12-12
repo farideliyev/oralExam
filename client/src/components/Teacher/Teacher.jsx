@@ -17,21 +17,9 @@ const validationSchema = Yup.object().shape({
 const Teacher=()=>{
     const {dispatch}=useContext(AuthContext)
     const history = useHistory();
-    // const[isAuth, setIsAuth]=useState(false);
-    // const [user, setUser]=useState(null)
-
-    // useEffect(() => {
-    //     if(isAuth){
-    //        props.parentData(isAuth, user)
-    //     }
-    // })
-
-    useEffect(() => {
-
-    })
 
    const handleFetch = async (values) => {
-       debugger
+
     let response = await fetch('http://localhost:3000/api/teachers/login', {
         method: 'POST',
         body: JSON.stringify({
@@ -44,26 +32,11 @@ const Teacher=()=>{
 
     })
 
-    // if (response.status=== 200) {
-    //     let responseJson= await response.json()
-    //     setUser(responseJson)
-    //     setIsAuth(true)
-    //      console.log(isAuth +" from fetch")
-    //     history.push('/admin')
-    //
-    //
-    // }
-
        if (response.status=== 200) {
-
-
            await dispatch({
                type:"LOGIN"
-
            })
-
            history.push('/admin')
-
        }
 
     else if(response.status===500){

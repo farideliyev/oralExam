@@ -1,22 +1,21 @@
 import React, {useContext} from 'react';
 import "../Admin.css";
 import {Navbar,Nav, Button} from 'react-bootstrap'
-import {NavLink, useHistory} from 'react-router-dom';
+import {NavLink, useHistory, withRouter} from 'react-router-dom';
 import {AuthContext} from "../../../auth/authContext";
 
-
 const NavBar = (props) => {
- const {state}=useContext(AuthContext)
-const history=useHistory()
-    
- async function logout(){
 
+ const {state}=useContext(AuthContext)
+
+ async function logout(){
+     debugger;
      let response= await fetch('http://localhost:3000/api/teachers/logout', {
          method: "POST"
      })
 
      if (response.status===200) {
-          history.push('/')
+          props.history.push('/')
      }
  }
     return (
@@ -29,7 +28,7 @@ const history=useHistory()
                         <NavLink to="/admin/add_session">Add Session</NavLink>
                         <NavLink to="/admin/show_students">Show Students</NavLink>
                         <NavLink to="/admin/execute">Execute an exam</NavLink>
-                    <Button variant="danger"  onClick={()=>logout()}>Log Out</Button>
+                    <Button variant="danger"  onClick={logout}>Log Out</Button>
                 </Nav>
             </Navbar>
         </div>

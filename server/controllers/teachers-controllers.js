@@ -19,10 +19,8 @@ exports.teachersLogin = async (req, res) => {
                 const d=userData[0]
                 const fullName= `${d.name} ${d.surname}`
                 let expireTime=15*60
-                const token = jsonwebtoken.sign({user: fullName}, jwtSecret, {expiresIn: expireTime})
+                const token = jsonwebtoken.sign({user: {fullName, role: "teacher"}}, jwtSecret, {expiresIn: expireTime})
                 res.cookie('token', token, {httpOnly:true, sameSite:true, maxAge: 1000 * expireTime})
-                // const d=userData[0]
-                // res.json(fullName)
                 res.end()
 
             } else{

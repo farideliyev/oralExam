@@ -1,5 +1,6 @@
 const express = require('express')
 const jwt = require('express-jwt');
+const jsonwebtoken=require("jsonwebtoken")
 
 const cookieParser=require('cookie-parser')
 const studentsRouter = require('./routes/students-route')
@@ -8,24 +9,23 @@ const coursesRouter=require('./routes/courses-route')
 const examsRouter=require('./routes/exams-route')
 const gradesRouter=require('./routes/grades-route')
 
+
 const jwtSecret = 'secret123';
 
 const PORT = process.env.PORT || 8080
 const app = express()
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 const bodyParser = require('body-parser')
-// const yourPassword = "123farid";
 
-// bcrypt.hash(yourPassword, saltRounds, (err, hash) => {
-//   // Now we can store the password hash in db.
-// });
+// const yourPassword = "123farid";
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser())
 
+app.use('/api/students', studentsRouter)
 app.use('/api/teachers', teachersRouter)
+
+//declaring express-jwt middleware
 app.use(
     jwt({
     secret:jwtSecret,
@@ -34,13 +34,30 @@ app.use(
 
   })
 )
+//middleware function for role checking
+ async function verifyRole(req, res, next) {
+        let decoded= await jsonwebtoken.verify(req.cookies.token, jwtSecret)
+        try{
+            if(decoded.user.role=="teacher") {
+                next()
+            }
+            else if(decoded.user.role==="student"){
+                throw new Error("You do not have access to teacher's page")
+
+            }
+        }
+        catch (err){
+            next(err)
+        }
+
+}
 
 //Route usage
-app.use('/api/students', studentsRouter)
 
-app.get('/api/admin',  function (req,res){
-    res.json(req.user.user)
-    console.log("in admin router")
+
+app.get('/api/admin', verifyRole, function (err,req,res){
+    if(err) console.log(err)
+    res.json(req.user.user.fullName)
     res.end()
 } )
 app.use('/api/courses', coursesRouter)
