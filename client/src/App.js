@@ -15,6 +15,7 @@ function App() {
    const AdminWithHOC=withAuthRedirect(Admin)
     const StudentProfileWithRouter=withRouter(StudentProfile)
 
+
     return (
         <div>
             <Route exact path="/" render={()=><HomePage/>}/>

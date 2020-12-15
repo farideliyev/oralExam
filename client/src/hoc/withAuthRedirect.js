@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../auth/authContext";
 import { useHistory} from "react-router";
+import Error from "../helpers/Error";
 
 export const withAuthRedirect = (Component) => {
 
@@ -19,6 +20,7 @@ export const withAuthRedirect = (Component) => {
       let response= await fetch("http://localhost:3000/api/admin")
 
       if(response.status===200){
+        debugger
         let responseJson= await response.json()
         state.user=responseJson
          setStatus(response.status)
@@ -37,7 +39,7 @@ export const withAuthRedirect = (Component) => {
     return (
         <div>
           {status===200 && <Component user={state.user}/>}
-          {status===403 && <div>{serverError}</div>}
+          {status===403 && <Error error={serverError}/>}
         </div>
     )
 

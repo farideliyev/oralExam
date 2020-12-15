@@ -1,0 +1,11 @@
+.error-container{
+    height: 93vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-container p{
+    font-size:53px
+}

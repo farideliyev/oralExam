@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Form, Button} from 'react-bootstrap'
 import '../Teacher/Teacher.css';
 import {Formik} from 'formik';
 import * as Yup from "yup";
 import {useHistory} from "react-router";
+import {AuthContext} from "../../auth/authContext";
 
 
 const validationSchema = Yup.object().shape({
@@ -12,6 +13,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Student = () => {
+    const {dispatch}=useContext(AuthContext)
     const history = useHistory()
     const [serverError, setServerError]=useState("")
 
@@ -25,8 +27,8 @@ const Student = () => {
 
 
         })
+        // GET STUDENT ID FROM SERVER AND SEND IT TO REDUCER
         if (response.status === 200) {
-            debugger
             history.push('/student/'+id)
         } else if(response.status===401){
             let responseJson=await response.json()

@@ -23,6 +23,14 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 app.use('/api/students', studentsRouter)
+//admin route for student
+app.get('/api/students/admin', (req,res)=>{
+    let decoded=jsonwebtoken.verify(req.cookies.token, jwtSecret)
+    let {id, fullName}=decoded.user
+
+    res.json({studentData:{id:id, fullName: fullName}})
+
+})
 app.use('/api/teachers', teachersRouter)
 
 //declaring express-jwt middleware
@@ -34,20 +42,23 @@ app.use(
 
   })
 )
+
+
 //middleware function for role checking
  async function verifyRole(req, res, next) {
         let decoded= await jsonwebtoken.verify(req.cookies.token, jwtSecret)
         try{
-            if(decoded.user.role=="teacher") {
+            if(decoded.user.role==="teacher") {
+                console.log(decoded.user.role)
                 next()
             }
             else if(decoded.user.role==="student"){
-                throw new Error("You do not have access to teacher's page")
+                throw new Error("You are not teacher!!!")
 
             }
         }
         catch (err){
-            next(err)
+            res.status(403).json(err.message)
         }
 
 }
@@ -55,8 +66,8 @@ app.use(
 //Route usage
 
 
-app.get('/api/admin', verifyRole, function (err,req,res){
-    if(err) console.log(err)
+app.get('/api/admin', verifyRole, function (req,res){
+
     res.json(req.user.user.fullName)
     res.end()
 } )

@@ -57,7 +57,6 @@ exports.login = async (req, res) => {
                let expireTime=15*60
                let token=jsonwebtoken.sign({user:{id:studentId ,role:"student" , fullName:student}}, jwtSecret, {expiresIn: expireTime})
                res.cookie('token', token, {httpOnly:true, sameSite:true, maxAge: 1000 * expireTime})
-               res.json(req.user.user)
                res.end()
            }
             else{
