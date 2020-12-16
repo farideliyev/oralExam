@@ -60,7 +60,7 @@ const Student = () => {
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Student Id</Form.Label>
                         <Form.Control
-                            type="number"
+                            type="text"
                             placeholder="student id"
                             name="id"
                             onChange={handleChange}

@@ -1,27 +1,9 @@
-import React, {useContext, useEffect} from 'react';
-import { useHistory} from 'react-router-dom';
-import {AuthContext} from "../../auth/authContext";
+import React from 'react';
 import "./StudentProfile.css"
-
+import {useHistory} from "react-router";
 
 const StudentProfile = (props) => {
-    const {state, dispatch} = useContext(AuthContext)
-    let history = useHistory()
-    const {fullName, id} = state.student
-    let userId = props.match.params.id
-
-    //get student data after mounting page
-    useEffect(()=>{
-        const fetchDataForStudent= async ()=>{
-            let response= await fetch("http://localhost:3000/api/students/admin")
-            if(response.status===200){
-                let data=await response.json()
-                debugger
-                await dispatch({type: "STUDENT_LOGIN", payload:data.studentData})
-            }
-        }
-    }, [dispatch])
-
+ const history=useHistory()
 
    // LogOut function
     const logout= async ()=>{
@@ -30,9 +12,9 @@ const StudentProfile = (props) => {
     }
 
     return (
-        <div className="stdProfileContainer">
-            <p>Student's full name <strong>{fullName}</strong></p>
-            <p>StudentId <strong>{id}</strong></p>
+        <div className="stdProfileWrapper">
+            <p>Student's full name <strong>{props.fullName}</strong></p>
+            <p>StudentId <strong>{props.id}</strong></p>
             <button type="submit" onClick={logout}>Log out</button>
         </div>
 

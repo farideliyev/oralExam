@@ -7,13 +7,13 @@ import HomePage from './HomePage/HomePage';
 import Admin from './components/Admin/Admin';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {withAuthRedirect} from "./hoc/withAuthRedirect";
-import StudentProfile from "./components/Student/StudentProfile";
+import StudentContainer from "./components/Student/StudentContainer";
 
 
 function App() {
 
    const AdminWithHOC=withAuthRedirect(Admin)
-    const StudentProfileWithRouter=withRouter(StudentProfile)
+    const StudentContainerWithRouter=withRouter(StudentContainer)
 
 
     return (
@@ -24,7 +24,7 @@ function App() {
 
             <Route exact path="/student" render={() => <Student/>}/>
             
-            <Route path="/student/:id" render={()=><StudentProfileWithRouter/>}/>
+            <Route path="/student/:id" render={()=><StudentContainerWithRouter/>}/>
 
 
             <Route path={`/admin`} render={()=><AdminWithHOC/>}/>

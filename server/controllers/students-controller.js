@@ -43,11 +43,8 @@ exports.studentsAvailable = async (req, res) => {
 exports.login = async (req, res) => {
     // login for student
     let studentId=req.body.id
-
-    console.log(studentId)
-
     knex
-        .select(studentId, "name", "surname") // select all records
+        .select("student_id", "name", "surname") // select all records
         .from('students') // from 'students' table
         .where("student_id", studentId)
         .then(studentData => {

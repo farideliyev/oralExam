@@ -18,13 +18,13 @@ knex.schema
     .then((exists) => {
       if (!exists) {
         // If no "books" table exists
-        // create new, with "id", "author", "title",
+        // create new
         // "pubDate" and "rating" columns
         // and use "id" as a primary identification
-        // and increment "id" with every new record (book)
+        // and increment "id" with every new record
         return knex.schema.createTable('students', (table)  => {
           table.increments('id').primary()
-          table.integer('student_id')
+          table.string('student_id')
           table.string('name')
           table.string('surname')
           table.integer('time')
