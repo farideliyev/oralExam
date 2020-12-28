@@ -26,10 +26,8 @@ app.use('/api/students', studentsRouter)
 //admin route for student
 app.get('/api/students/admin', (req,res)=>{
     let decoded=jsonwebtoken.verify(req.cookies.token, jwtSecret)
-    let {id, fullName}=decoded.user
-
-    res.json({studentData:{id:id, fullName: fullName}})
-
+    let {id, fullName, time, presence, grade }=decoded.user
+    res.json({studentData:{id, fullName, time, presence, grade}})
 })
 app.use('/api/teachers', teachersRouter)
 

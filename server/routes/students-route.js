@@ -9,6 +9,7 @@ router.get('/all',  studentsRoutes.studentsAll)
 router.get('/available', studentsRoutes.studentsAvailable)
 router.post('/login', studentsRoutes.login)
 router.get('/logout', studentsRoutes.logOut)
+router.get('/availableDates', studentsRoutes.availableDates)
 
 // function verifyToken(req, res, next) {
 //     try{

@@ -38,21 +38,57 @@ exports.studentsAvailable = async (req, res) => {
         })
 }
 
+exports.availableDates = async (req, res) => {
+    // query to exams
+    knex
+        .select("examStartTime", "examEndTime")
+        .from("exams")
+        .where("examCrsName", "Web Applications")
+        .then((examData) => {
+            console.log(examData[0])
+            //query to students_time
+            knex
+                .select("time")
+                .from("students")
+                .whereNotNull("time")
+                .then((selectedTime)=>{
+                    console.log(selectedTime[0])
+                }).catch(err=>{
 
+            })
+        }).catch(err => {
+
+    })
+}
 
 exports.login = async (req, res) => {
     // login for student
     let studentId=req.body.id
     knex
-        .select("student_id", "name", "surname") // select all records
+        .select("student_id", "name", "surname", "time", "presence", "grade")
         .from('students') // from 'students' table
+        .leftJoin("grades", "id", "grdStudentId" )
         .where("student_id", studentId)
+
         .then(studentData => {
-           if(studentData[0]){
-               let d=studentData[0]
+
+            if (studentData[0]) {
+                let d = studentData[0]
+
                let student=`${d.name} ${d.surname}`
+               let time=d.time
+               let presence=d.presence
+               let grade=d.grade
                let expireTime=15*60
-               let token=jsonwebtoken.sign({user:{id:studentId ,role:"student" , fullName:student}}, jwtSecret, {expiresIn: expireTime})
+               let token = jsonwebtoken.sign(
+                   {
+                       user:
+                           {id: studentId, role: "student", fullName: student,
+                               time, presence, grade
+                           }
+                   },
+                   jwtSecret, {expiresIn: expireTime}
+               )
                res.cookie('token', token, {httpOnly:true, sameSite:true, maxAge: 1000 * expireTime})
                res.end()
            }

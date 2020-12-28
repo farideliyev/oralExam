@@ -24,6 +24,13 @@ export const authReducer=(state, action)=>{
                 ...state,
                 student: action.payload
             }
+
+        case "STUDENT_LOGOUT":
+            return {
+                ...state, student: ""
+            }
+
+
     }
 }
 

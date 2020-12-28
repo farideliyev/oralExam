@@ -1,7 +1,8 @@
 .homePage{
     text-align: center;
     height: 100vh;
-    padding-top:30px
+    padding-top:30px;
+
 }
 
 .homePageContainer{ 
@@ -20,7 +21,12 @@
     align-items: center;
     width: 100%;
     opacity: 0.9;
+    color:whitesmoke;
     
+}
+
+.homePageContainer_text >h4{
+color:whitesmoke;
 }
 
 .homePageContainer:hover{ 

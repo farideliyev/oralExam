@@ -1,5 +1,22 @@
-.stdProfileWrapper{
+.stdProfileWrapper {
+    display: flex;
+    height: 93vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
     text-align: center;
     height: 90vh;
-    vertical-align: center;
+
 }
+
+.stdProfileWrapper .info {
+    margin-bottom: 10px;
+}
+
+.logout {
+    display: flex;
+    justify-content: flex-end;
+}
+
+

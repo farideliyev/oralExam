@@ -29,6 +29,7 @@ const Student = () => {
         })
         // GET STUDENT ID FROM SERVER AND SEND IT TO REDUCER
         if (response.status === 200) {
+
             history.push('/student/'+id)
         } else if(response.status===401){
             let responseJson=await response.json()
