@@ -5,6 +5,7 @@ import {Button} from "antd";
 import 'antd/dist/antd.css'
 import StudentInfo from "./StudentInfo";
 import {AuthContext} from "../../auth/authContext";
+import Preloader from "../../helpers/Preloader";
 
 const StudentProfile = (props) => {
     const {dispatch}=useContext(AuthContext)
@@ -16,6 +17,7 @@ const StudentProfile = (props) => {
     const getInfo = () => {
 
        setInfo(props.info)
+
     }
 
    // LogOut function
@@ -29,22 +31,23 @@ const StudentProfile = (props) => {
     }
 
 
-    return (
-        <div>
-            <div className="logout">
-                <Button type="primary" size="large" danger onClick={logout} >Log out</Button>
-            </div>
+    return (<div>
+        {props.fullName
+            ? <div>
+                <div className="logout">
+                    <Button type="primary" size="large" danger onClick={logout} >Log out</Button>
+                </div>
 
-            <div className="stdProfileWrapper">
+                <div className="stdProfileWrapper">
 
-                <p>Student's full name: <strong>{props.fullName}</strong></p>
-                <p>Student ID: <strong>{props.id}</strong></p>
-                <Button type="primary" size={"large"} onClick={getInfo} className="info">Show Info</Button>
-                {info
-                    ? <StudentInfo info={info}/>
-                    : <p>Loading</p>
-                }
+                    <p>Student's full name: <strong>{props.fullName}</strong></p>
+                    <p>Student ID: <strong>{props.id}</strong></p>
+                    <Button type="primary" size={"large"} onClick={getInfo} className="info">Show Info</Button>
+                    {info && <StudentInfo info={info}/>}
+                </div>
             </div>
+            : <Preloader />
+        }
         </div>
     )
 }
