@@ -41,23 +41,25 @@ exports.studentsAvailable = async (req, res) => {
 exports.availableDates = async (req, res) => {
     // query to exams
     knex
-        .select("examStartDate", "examEndDate")
+        .select("examStartDate", "examEndDate", "examStartTime", "examEndTime")
         .from("exams")
         .where("examCrsName", "Web Applications")
         .then((examData) => {
+            let startTime=examData[0].examStartTime.split(" ")[1]
             let date={
                 startDate:examData[0].examStartDate,
-                endDate:examData[0].examEndDate
+                endDate:examData[0].examEndDate,
+                startTime,
+                endTime:examData[0].examEndTime
             }
-            console.log(date)
             res.json(date)
             //query to students_time
             knex
                 .select("time")
                 .from("students")
                 .whereNotNull("time")
-                .then((selectedTime)=>{
-                    // console.log(selectedTime)
+                .then((studentData)=>{
+                    console.log(studentData)
                 }).catch(err=>{
 
             })

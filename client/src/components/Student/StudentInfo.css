@@ -1,5 +1,5 @@
 .studentInfo_button{
-    margin:0 3px 15px;
+    margin:0 3px 20px;
     background-color: turquoise;
     color: black;
 
@@ -8,4 +8,29 @@
 .studentInfo_button:hover{
    
 }
+
+.studentInfo_button-check{
+    margin-top: 20px;
+    background-color: goldenrod;
+    border: 0;
+    color:whitesmoke;
+
+}
+
+.studentInfo_button-check:hover {
+    background-color: darkgoldenrod;
+    transform: scale(1.2, 1.2);
+    color: white
+
+}
+
+.studentInfo_button-check:visited, .studentInfo_button-check:active{
+    background-color: darkgoldenrod;
+
+}
+
+
+
+
+
 
