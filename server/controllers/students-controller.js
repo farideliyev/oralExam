@@ -54,17 +54,39 @@ exports.availableDates = async (req, res) => {
             }
             res.json(date)
             //query to students_time
-            knex
-                .select("time")
-                .from("students")
-                .whereNotNull("time")
-                .then((studentData)=>{
-                    console.log(studentData)
-                }).catch(err=>{
-
-            })
         }).catch(err => {
 
+    })
+}
+
+exports.addDatetime = async (req, res) => {
+    let datetime=req.body.datetime
+    let id=req.body.id
+
+    knex
+        .select("time")
+        .from("students")
+        .where("time", datetime)
+        .then((examData) => {
+
+            if(examData[0]){
+                    console.log("you are in server")
+                    res.status(409).json({
+                        error: "Slot is full"
+                    })
+
+            } else {
+                knex("students")
+                    .where("student_id", id)
+                    .update("time", datetime)
+                    .then(()=>{
+                        res.end()
+                    }).catch(err=>{
+                        console.log("error is:",err)
+                })
+            }
+        }).catch(err => {
+            console.log(err)
     })
 }
 

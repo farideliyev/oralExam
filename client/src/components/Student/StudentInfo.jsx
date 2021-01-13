@@ -7,7 +7,8 @@ const StudentInfo = (props) => {
     const [availableDates, setAvailableDates] = useState([])
     const [selectedDateTime, setSelectedDateTime] = useState({date:"", time:""})
     const [loading, setLoading] = useState(false)
-    const {grade, time, presence, date = {}} = props.info
+    const [error, setError] = useState("")
+    const {id, grade, time, presence, date = {}} = props.info
     let {startDate, endDate, startTime, endTime} = date
 
     useEffect(() => {
@@ -39,19 +40,54 @@ const StudentInfo = (props) => {
         }
     }, [startDate, endDate])
 
+    const handleCheck = async (e) => {
+        e.preventDefault()
+
+        if(selectedDateTime.time && selectedDateTime.date) {
+            setError("")
+            setLoading(true)
+            let response = await fetch("http://localhost:3000/api/students/addDatetime", {
+                method: "POST",
+                body: JSON.stringify({
+                    datetime: selectedDateTime.date + " " + selectedDateTime.time,
+                    id:id
+
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            if(response.status===409) {
+
+                setError("Slot is full")
+                setLoading(false)
+                setSelectedDateTime(prevState => ({...prevState, date:"", time:""}))
+            }
+            else if(response.status===200){
+                setLoading(false)
+                console.log("good")
+            }
+        } else {
+          setError("Please choose time")
+            setLoading(false)
+        }
+    }
+
     const getDisabledMinutes = (selectedHour) => {
         if (selectedHour === 1) {
             return [30, 45]
         }
     }
-
+    // get Date
     const getSelectedDate=(e)=>{
         let inner=e.target.innerText
         setSelectedDateTime(prevState => ({...prevState, date:inner}))
     }
 
-    const getSelectedTime=(time)=>{
-        let formattedTime=moment(time).format("HH:mm:ss")
+    //get time
+    const getSelectedTime=(time, timeString)=>{
+        let formattedTime=timeString+ ":00"
          setSelectedDateTime(prevState => ({...prevState, time:formattedTime}))
     }
 
@@ -76,7 +112,7 @@ const StudentInfo = (props) => {
         <div className="studentInfo">
             {grade && <strong>Your grade is {grade}</strong>}
             {presence === "NO" && <p>You were absent</p>}
-            {/* if student have time show it and option to delete appointment*/}
+            {time && <p>Your exam will be held on {time}</p>}
             {time === null && presence === "NOT YET" &&
             <div>
                 <p>Please choose exam date and time</p>
@@ -93,9 +129,9 @@ const StudentInfo = (props) => {
                 })
                 }
                 <div>
-                    <TimePicker minuteStep={15} format="h:mm" size="large"
-
+                    <TimePicker minuteStep={15}  size="large"
                                 showNow={false}
+                                format="HH:mm"
                                 hideDisabledOptions
                                 disabledHours={disabledHours}
                                 disabledMinutes={getDisabledMinutes}
@@ -103,15 +139,18 @@ const StudentInfo = (props) => {
                     />
                 </div>
                 <div>
-                    <Button size="large" type="primary" className="studentInfo_button-check"
-                            loading={loading} onClick={()=>setLoading(true)}
+                    <Button size="large" type="primary"
+                            className="studentInfo_button-check" loading={loading}
+                            onClick={handleCheck}
+
                     >
-{/*2 hours*/}
-                        Check if datetime
-                        <span>{`:${selectedDateTime.date} ${selectedDateTime.time}`}</span>
+
+                        Add if datetime
+                        <span>{`${selectedDateTime.date} ${selectedDateTime.time}`}</span>
                         available
                     </Button>
                 </div>
+                {error && <div style={{color:"red"}}>{error}</div>}
             </div>
             }
         </div>

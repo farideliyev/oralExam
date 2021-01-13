@@ -9,7 +9,7 @@ const StudentContainer = (props) => {
     const [date, setDate]=useState("")
     let history = useHistory()
     const {fullName, id, time, grade, presence} = state.student
-    const info = {time, grade, presence, date}
+    const info = {id, time, grade, presence, date}
     let userId = props.match.params.id
 
     // compare data in useReducer with url string
