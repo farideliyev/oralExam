@@ -19,7 +19,7 @@
 .studentInfo_button-check span{
     margin-right: 3px;
 }
-.studentInfo_button-check:hover {
+.studentInfo_button-check:hover, .studentInfo_button-check:focus  {
     background-color: darkgoldenrod;
     transform: scale(1.2, 1.2);
     color: white

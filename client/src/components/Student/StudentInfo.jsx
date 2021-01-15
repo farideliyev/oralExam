@@ -2,8 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {Button, TimePicker} from 'antd';
 import moment from "moment";
 import './StudentInfo.css'
+import {handleFetch} from "./Student";
+import {useHistory} from "react-router";
 
 const StudentInfo = (props) => {
+    const history = useHistory()
     const [availableDates, setAvailableDates] = useState([])
     const [selectedDateTime, setSelectedDateTime] = useState({date:"", time:""})
     const [loading, setLoading] = useState(false)
@@ -66,7 +69,11 @@ const StudentInfo = (props) => {
             }
             else if(response.status===200){
                 setLoading(false)
-                console.log("good")
+                let response = await handleFetch(id)
+                if(response.status===200){
+                    history.go(0)
+                }
+
             }
         } else {
           setError("Please choose time")
@@ -74,11 +81,7 @@ const StudentInfo = (props) => {
         }
     }
 
-    const getDisabledMinutes = (selectedHour) => {
-        if (selectedHour === 1) {
-            return [30, 45]
-        }
-    }
+
     // get Date
     const getSelectedDate=(e)=>{
         let inner=e.target.innerText
@@ -112,7 +115,7 @@ const StudentInfo = (props) => {
         <div className="studentInfo">
             {grade && <strong>Your grade is {grade}</strong>}
             {presence === "NO" && <p>You were absent</p>}
-            {time && <p>Your exam will be held on {time}</p>}
+            {time && !grade && <p>Your exam will be held on {time}</p>}
             {time === null && presence === "NOT YET" &&
             <div>
                 <p>Please choose exam date and time</p>
@@ -134,7 +137,6 @@ const StudentInfo = (props) => {
                                 format="HH:mm"
                                 hideDisabledOptions
                                 disabledHours={disabledHours}
-                                disabledMinutes={getDisabledMinutes}
                                 onChange={getSelectedTime}
                     />
                 </div>

@@ -118,6 +118,7 @@ exports.login = async (req, res) => {
                    },
                    jwtSecret, {expiresIn: expireTime}
                )
+                console.log("you passed")
                res.cookie('token', token, {httpOnly:true, sameSite:true, maxAge: 1000 * expireTime})
                res.end()
            }

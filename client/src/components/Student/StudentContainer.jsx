@@ -17,7 +17,6 @@ const StudentContainer = (props) => {
         if(userId!==id) history.push('/student')
     }
 
-
     //get student data after mounting page
     useEffect(() => {
 
